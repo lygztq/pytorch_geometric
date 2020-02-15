@@ -23,6 +23,8 @@ def size_repr(value):
         return list(value.size())
     elif isinstance(value, int) or isinstance(value, float):
         return [1]
+    elif isinstance(value, list) or isinstance(value, tuple):
+        return [len(value)]
     else:
         return value
 
@@ -246,7 +248,7 @@ class Data(object):
 
     def is_undirected(self):
         r"""Returns :obj:`True`, if graph edges are undirected."""
-        return is_undirected(self.edge_index, self.num_nodes)
+        return is_undirected(self.edge_index, self.edge_attr, self.num_nodes)
 
     def is_directed(self):
         r"""Returns :obj:`True`, if graph edges are directed."""

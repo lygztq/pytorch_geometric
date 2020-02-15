@@ -30,7 +30,18 @@ Dense Convolutional Layers
     :members:
     :undoc-members:
 
+.. automodule:: torch_geometric.nn.dense.dense_graph_conv
+    :members:
+    :undoc-members:
+
 .. automodule:: torch_geometric.nn.dense.dense_gin_conv
+    :members:
+    :undoc-members:
+
+Normalization Layers
+--------------------
+
+.. automodule:: torch_geometric.nn.norm
     :members:
     :undoc-members:
 
@@ -52,6 +63,10 @@ Dense Pooling Layers
 --------------------
 
 .. automodule:: torch_geometric.nn.dense.diff_pool
+    :members:
+    :undoc-members:
+
+.. automodule:: torch_geometric.nn.dense.mincut_pool
     :members:
     :undoc-members:
 

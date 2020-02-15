@@ -84,7 +84,7 @@ For creating datasets which do not fit into memory, the :class:`torch_geometric.
 
 Therefore, the following methods need to be further implemented:
 
-:meth:`torch_geometric.data.Dataset.__len__`:
+:meth:`torch_geometric.data.Dataset.len`:
     Returns the number of examples in your dataset.
 
 :meth:`torch_geometric.data.Dataset.get`:
@@ -114,29 +114,29 @@ Let's see this process in a simplified example:
         def processed_file_names(self):
             return ['data_1.pt', 'data_2.pt', ...]
 
-        def __len__(self):
-            return len(self.processed_file_names)
-
         def download(self):
             # Download to `self.raw_dir`.
 
         def process(self):
             i = 0
             for raw_path in self.raw_paths:
-                 # Read data from `raw_path`.
-                 data = Data(...)
+                # Read data from `raw_path`.
+                data = Data(...)
 
-                 if self.pre_filter is not None and not self.pre_filter(data):
-                     continue
+                if self.pre_filter is not None and not self.pre_filter(data):
+                    continue
 
                 if self.pre_transform is not None:
-                     data = self.pre_transform(data)
+                    data = self.pre_transform(data)
 
-                torch.save(data, ops.join(self.processed_dir, 'data_{}.pt'.format(i)))
+                torch.save(data, osp.join(self.processed_dir, 'data_{}.pt'.format(i)))
                 i += 1
 
+        def len(self):
+            return len(self.processed_file_names)
+
         def get(self, idx):
-            data = torch.load(osp.join(self.processed_dir, 'data_{}.pt'.format(idx))
+            data = torch.load(osp.join(self.processed_dir, 'data_{}.pt'.format(idx)))
             return data
 
 Here, each graph data object gets saved individually in :meth:`torch_geometric.data.Dataset.process`, and is manually loaded in :meth:`torch_geometric.data.Dataset.get`.
@@ -146,19 +146,13 @@ Frequently Asked Questions
 
 #. **How can I skip the execution of** :meth:`download` **and/or** :meth:`process` **?**
 
-    You can skip downloading and/or processing by overriding the :meth:`_download()` and :meth:`_process()` methods:
+    You can skip downloading and/or processing by just not overriding the :meth:`download()` and :meth:`process()` methods:
 
     .. code-block:: python
 
         class MyOwnDataset(Dataset):
-            def __init__(self, root, transform=None, pre_transform=None):
-                super(MyOwnDataset, self).__init__(root, transform, pre_transform)
-
-            def _download(self):
-                pass
-
-            def _process(self):
-                pass
+            def __init__(self, transform=None, pre_transform=None):
+                super(MyOwnDataset, self).__init__(None, transform, pre_transform)
 
 #. **Do I really need to use these dataset interfaces?**
 
